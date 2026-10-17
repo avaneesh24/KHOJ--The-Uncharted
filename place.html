@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Place Discovery | KHOJ — The Uncharted</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+</head>
+<body style="background: var(--color-ivory);">
+
+  <!-- Global Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <div class="brand-icon">🧭</div>
+        <div class="brand-text">
+          <h1>KHOJ</h1>
+          <span class="tagline">The Uncharted</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="/" class="btn btn-secondary">
+          ← Back to Discoveries
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="max-width: 820px; padding: 40px 20px 80px;">
+    <div id="placeLoading" class="loading-state">
+      <div class="spinner"></div>
+      <h3>Loading Discovery Details...</h3>
+    </div>
+
+    <div id="placeError" class="empty-state" style="display: none;">
+      <div class="empty-icon">⚠️</div>
+      <h3 id="errorMessage">Discovery Not Found</h3>
+      <p>The requested discovery record could not be located in the database.</p>
+      <a href="/" class="btn btn-primary">Return to Discovery Hub</a>
+    </div>
+
+    <article id="placeArticle" class="place-card" style="display: none; box-shadow: var(--shadow-md);">
+      <header class="place-card-header" style="padding: 30px;">
+        <div class="place-badges-row">
+          <span id="badgeCategory" class="cat-badge">Category</span>
+          <span id="badgeClaim" class="claim-badge">Claim</span>
+        </div>
+        <h1 id="placeName" class="place-title" style="font-size: 32px; margin: 12px 0 6px;"></h1>
+        <div id="placeDest" class="place-destination" style="font-size: 15px;"></div>
+      </header>
+
+      <div class="place-card-body" style="padding: 30px; gap: 24px;">
+        <!-- Claim Context Box -->
+        <div id="claimNoticeBox"></div>
+
+        <!-- Detailed Story -->
+        <div>
+          <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-forest-teal); margin-bottom: 10px;">
+            Cultural Story & Context
+          </h3>
+          <p id="placeStory" style="font-size: 16px; line-height: 1.7; color: var(--color-charcoal); white-space: pre-line;"></p>
+        </div>
+
+        <!-- Practical Tips -->
+        <div>
+          <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-forest-teal); margin-bottom: 10px;">
+            Actionable Local Tips
+          </h3>
+          <ul id="tipsList" class="modal-tips-list"></ul>
+        </div>
+
+        <!-- Missing Data Caveats -->
+        <div id="missingNoticeBox" style="display: none;"></div>
+
+        <!-- Source Link & Freshness -->
+        <div id="sourceDetailsBox" style="padding: 14px; background: var(--color-ivory); border-radius: var(--radius-sm); font-size: 13px;"></div>
+      </div>
+
+      <footer class="place-card-footer" style="padding: 20px 30px;">
+        <button id="upvoteBtn" class="btn btn-outline-forest">
+          ▲ Upvote (<span id="upvoteCount">0</span>)
+        </button>
+        <button id="reportBtn" class="btn" style="color: #92400E; font-size: 13px; text-decoration: underline;">
+          🚩 Report Inaccuracy
+        </button>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="text-align: center; font-size: 12px; color: var(--color-sage);">
+      © 2026 KHOJ — Discover Places. Uncover Stories. AZINHACK '26 Hackathon Edition.
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Determine place ID from query parameter or path
+      const urlParams = new URLSearchParams(window.location.search);
+      let placeId = urlParams.get("id");
+      if (!placeId) {
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        if (parts.length >= 2 && parts[0] === "place") {
+          placeId = parts[1];
+        }
+      }
+
+      if (!placeId) {
+        showError("No place ID specified in URL.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/places/${placeId}`);
+        if (!res.ok) throw new Error("Place not found");
+        const place = await res.json();
+        renderPlace(place);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    function renderPlace(p) {
+      document.getElementById("placeLoading").style.display = "none";
+      document.getElementById("placeArticle").style.display = "flex";
+
+      document.title = `${p.name} | KHOJ — The Uncharted`;
+      document.getElementById("placeName").textContent = p.name;
+      const sourceHtml = p.source_type === "live_tinyfish" 
+        ? `<span class="badge-source-live" style="margin-left: 6px;"><span class="status-dot active"></span> Live TinyFish</span>`
+        : `<span class="badge-source-archive" style="margin-left: 6px;">🏛️ Verified Archive</span>`;
+      document.getElementById("placeDest").innerHTML = `📍 <strong>${p.destination}</strong> • ${sourceHtml} • Budget: <span style="text-transform: capitalize;">${p.budget_tier}</span>`;
+      document.getElementById("badgeCategory").textContent = p.category.replace("_", " ");
+
+      // Claim badge & notice
+      const claimBox = document.getElementById("claimNoticeBox");
+      const badgeClaim = document.getElementById("badgeClaim");
+      if (p.claim_type === "documented_history") {
+        badgeClaim.className = "claim-badge claim-documented";
+        badgeClaim.textContent = "🛡️ Documented History";
+        claimBox.innerHTML = `<div style="background: #EDF4FF; border-left: 4px solid #1D4ED8; padding: 12px; border-radius: 4px; font-size: 13px; color: #1E40AF;"><strong>Documented History:</strong> Supported by archaeological documentation or verified gazetteers.</div>`;
+      } else if (p.claim_type === "folklore_oral_tradition") {
+        badgeClaim.className = "claim-badge claim-folklore";
+        badgeClaim.textContent = "📜 Cultural Folklore";
+        claimBox.innerHTML = `<div style="background: #FEF3C7; border-left: 4px solid #D97706; padding: 12px; border-radius: 4px; font-size: 13px; color: #92400E;"><strong>Cultural Folklore:</strong> Rooted in oral traditions and sacred regional mythologies.</div>`;
+      } else {
+        badgeClaim.className = "claim-badge claim-community";
+        badgeClaim.textContent = "👥 Community Experience";
+        claimBox.innerHTML = `<div style="background: #F3E8FF; border-left: 4px solid #9333EA; padding: 12px; border-radius: 4px; font-size: 13px; color: #6B21A8;"><strong>Community Experience:</strong> Shared directly by local residents and travellers.</div>`;
+      }
+
+      document.getElementById("placeStory").textContent = p.detailed_story;
+
+      // Tips
+      const tipsList = document.getElementById("tipsList");
+      const tips = Array.isArray(p.practical_tips) ? p.practical_tips : [];
+      if (tips.length > 0) {
+        tipsList.innerHTML = tips.map(t => `<li>💡 ${t}</li>`).join("");
+      } else {
+        tipsList.innerHTML = `<li>No practical tips submitted yet.</li>`;
+      }
+
+      // Missing notice
+      const missingBox = document.getElementById("missingNoticeBox");
+      const missing = Array.isArray(p.missing_fields_flag) ? p.missing_fields_flag : [];
+      if (missing.length > 0) {
+        missingBox.style.display = "block";
+        missingBox.innerHTML = `
+          <div class="missing-fields-box">
+            <span class="title">⚠️ Caveats & Unverified Details:</span>
+            <ul style="margin-left: 18px; margin-top: 4px;">
+              ${missing.map(m => `<li>${m}</li>`).join("")}
+            </ul>
+          </div>
+        `;
+      }
+
+      // Source details
+      const sourceBox = document.getElementById("sourceDetailsBox");
+      if (p.source_url) {
+        sourceBox.innerHTML = `
+          <strong>Source Link:</strong> <a href="${p.source_url}" target="_blank" rel="noopener noreferrer" style="color: var(--color-forest-teal); font-weight: 600;">${p.source_title || p.source_url} ↗</a>
+          <div style="font-size: 11px; color: #7E908D; margin-top: 4px;">Retrieved: ${new Date(p.retrieved_at).toLocaleString()} via ${p.source_type}</div>
+        `;
+      } else {
+        sourceBox.innerHTML = `<strong>Source:</strong> Verified Heritage Database`;
+      }
+
+      // Upvote
+      document.getElementById("upvoteCount").textContent = p.upvotes || 0;
+      const upvoteBtn = document.getElementById("upvoteBtn");
+      upvoteBtn.onclick = async () => {
+        try {
+          const res = await fetch(`/api/places/${p.id}/upvote`, { method: "POST" });
+          const data = await res.json();
+          document.getElementById("upvoteCount").textContent = data.upvotes;
+          upvoteBtn.classList.add("voted");
+        } catch (e) {
+          alert("Upvote failed");
+        }
+      };
+
+      // Report
+      document.getElementById("reportBtn").onclick = () => {
+        window.location.href = `/?reportPlaceId=${p.id}&reportPlaceName=${encodeURIComponent(p.name)}`;
+      };
+    }
+
+    function showError(msg) {
+      document.getElementById("placeLoading").style.display = "none";
+      document.getElementById("placeError").style.display = "block";
+      document.getElementById("errorMessage").textContent = msg;
+    }
+  </script>
+</body>
+</html>

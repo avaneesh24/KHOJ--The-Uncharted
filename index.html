@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHOJ — The Uncharted | Discover Places. Uncover Stories.</title>
+  <meta name="description" content="Local discovery platform helping travellers discover worthwhile lesser-known places, authentic cultural stories, food spots, and practical tips across India.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <img src="/static/khoj-logo.png" alt="KHOJ Logo" class="brand-logo-img">
+        <div class="brand-text">
+          <h1>KHOJ</h1>
+          <span class="tagline">The Uncharted</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#searchSection">Discover</a></li>
+          <li><a href="#categoriesSection">Categories</a></li>
+          <li><a href="#resultsSection">Explore Places</a></li>
+          <li><a href="#howItWorks">Methodology</a></li>
+          <li><a href="/docs" target="_blank">API Docs</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Live System / TinyFish Status Indicator -->
+        <button id="statusPill" class="status-pill" title="System Diagnostics">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText">Checking Engine...</span>
+        </button>
+
+        <button class="btn btn-primary" data-open-contribute>
+          <span>+</span> Share Discovery
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="searchSection">
+    <div class="container hero-content">
+      <div class="hero-badge">
+        ✨ AZINHACK '26 Hackathon Edition • Python + TinyFish Powered
+      </div>
+      
+      <h2 class="hero-title">
+        Discover Places. <span>Uncover Stories.</span>
+      </h2>
+      
+      <p class="hero-subtitle">
+        Beyond generic tourist lists. KHOJ extracts lesser-known local gems, living oral folklore, traditional markets, and unvarnished practical tips across India.
+      </p>
+
+      <!-- Search Console -->
+      <div class="search-console-card">
+        <form id="searchForm" class="search-form-grid">
+          <div class="form-group">
+            <label for="destinationInput">Destination / Region</label>
+            <input type="text" id="destinationInput" class="form-input" placeholder="e.g. Naddi, Lepakshi, Delhi" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="queryInput">What are you seeking?</label>
+            <input type="text" id="queryInput" class="form-input" placeholder="e.g. sunset ridge, hanging pillar, chaat, weavers" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="categorySelect">Category</label>
+            <select id="categorySelect" class="form-select">
+              <option value="all">All Categories</option>
+              <option value="culture_history">Culture & History</option>
+              <option value="local_food">Local Food</option>
+              <option value="markets_shopping">Markets & Crafts</option>
+              <option value="nature_scenic">Nature & Scenic</option>
+              <option value="local_experiences">Living Heritage</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="budgetSelect">Budget Tier</label>
+            <select id="budgetSelect" class="form-select">
+              <option value="all">Any Budget</option>
+              <option value="free">Free Only</option>
+              <option value="budget">Budget Friendly</option>
+              <option value="moderate">Moderate</option>
+              <option value="splurge">Splurge</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-search">
+            <span>🔍</span> Find Discoveries
+          </button>
+        </form>
+      </div>
+
+      <!-- Quick Discovery Chips -->
+      <div class="quick-chips-wrapper">
+        <span class="quick-chips-label">Popular Searches:</span>
+        <button class="chip-btn" data-dest="Naddi, Dharamshala" data-query="sunset ridge" data-cat="nature_scenic">
+          🌅 Naddi: Sunset Ridge
+        </button>
+        <button class="chip-btn" data-dest="Lepakshi, Andhra Pradesh" data-query="hanging pillar" data-cat="culture_history">
+          🏛️ Lepakshi: Hanging Pillar
+        </button>
+        <button class="chip-btn" data-dest="Sarojini Nagar, Delhi" data-query="export lane chaat" data-cat="markets_shopping">
+          🛍️ Sarojini: Secret Sample Racks
+        </button>
+        <button class="chip-btn" data-dest="Hampi / Anegundi" data-query="banana fiber kishkindha" data-cat="local_experiences">
+          🌾 Anegundi: Banana Fiber & Caves
+        </button>
+        <button class="chip-btn" data-dest="Nohwet / Mawlynnong, Meghalaya" data-query="living root bridge" data-cat="nature_scenic">
+          🌿 Meghalaya: Living Root Bridge
+        </button>
+        <button class="chip-btn" data-dest="Karaikudi, Chettinad" data-query="Athangudi handmade tile" data-cat="culture_history">
+          🎨 Chettinad: Athangudi Tiles
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integrity & Methodology Pillars -->
+  <section class="integrity-banner" id="howItWorks">
+    <div class="container">
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon">🌐</div>
+          <div class="pillar-info">
+            <h4>Live TinyFish Web Crawl</h4>
+            <p>Pulls live web knowledge from travel blogs, local gazetteers, and cultural archives with source URLs.</p>
+          </div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon">🐍</div>
+          <div class="pillar-info">
+            <h4>Python Data Pipeline</h4>
+            <p>Normalizes place names, strips SEO spam, detects duplicates, and validates structures before rendering.</p>
+          </div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon">📜</div>
+          <div class="pillar-info">
+            <h4>Folklore vs History</h4>
+            <p>Distinguishes documented archaeological facts from oral legends, local beliefs, and traveller memories.</p>
+          </div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon">⚖️</div>
+          <div class="pillar-info">
+            <h4>Transparent Ranking</h4>
+            <p>100% explainable rule-based scoring across query relevance, completeness, freshness, and category.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Bar -->
+  <section class="categories-bar" id="categoriesSection">
+    <div class="container">
+      <div class="section-head">
+        <h2>Explore Discovery Themes</h2>
+        <span style="font-size: 13px; color: var(--color-charcoal-light);">Filter places by travel interest</span>
+      </div>
+      <div id="categoriesList" class="categories-pills-list">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Discovery Results Section -->
+  <main class="results-section" id="resultsSection">
+    <div class="container">
+      <!-- Search Summary & Sort Toolbar -->
+      <div id="resultsSummary" class="search-summary-card">
+        <div class="summary-details">
+          <div id="summaryText" class="summary-query-title">Showing All Discoveries</div>
+          <div id="summarySourceBadge" class="summary-tags">
+            <!-- Badges rendered by JS -->
+          </div>
+        </div>
+
+        <div class="sort-controls">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect" class="sort-select">
+            <option value="relevance">Highest Relevance Score</option>
+            <option value="upvotes">Most Helpful (Upvotes)</option>
+            <option value="completeness">Information Completeness</option>
+            <option value="freshness">Freshest Information</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="loading-state" style="display: none;">
+        <div class="spinner"></div>
+        <h3>Uncovering Discoveries...</h3>
+        <p>Querying TinyFish web intelligence and synthesizing verified local knowledge records.</p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <div class="empty-icon">📍</div>
+        <h3>No discoveries found matching your criteria</h3>
+        <p>Try broadening your query keywords or destination filter, or contribute your own lesser-known local story.</p>
+        <button class="btn btn-primary" data-open-contribute>
+          Submit This Place to KHOJ
+        </button>
+      </div>
+
+      <!-- Results Grid -->
+      <div id="resultsGrid" class="places-grid">
+        <!-- Populated dynamically by app.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Community Contribution Banner -->
+  <section class="community-cta-section">
+    <div class="container community-cta-inner">
+      <div class="community-cta-text">
+        <h3>Have You Uncovered a Lesser-Known Place?</h3>
+        <p>
+          Help fellow explorers travel deeper. Share a family-run food stall, an unlisted sunset trail, or cultural folklore from your hometown or recent journey.
+        </p>
+      </div>
+      <button class="btn btn-secondary" style="background: var(--color-white); color: var(--color-forest-teal); padding: 12px 24px; font-weight: 700;" data-open-contribute>
+        + Add a Community Discovery
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="brand" style="color: var(--color-white);">
+            <img src="/static/khoj-logo.png" alt="KHOJ Logo" class="brand-logo-img brand-logo-img--footer">
+            <div class="brand-text">
+              <h2 style="font-size: 20px; font-weight: 800; color: #FFF;">KHOJ</h2>
+              <span class="tagline">The Uncharted</span>
+            </div>
+          </div>
+          <p>
+            An ethical, source-aware local discovery engine designed to help travelers discover hidden places and authentic local experiences. Built with Python, FastAPI, TinyFish AI Web Retrieval, and Vanilla Web Standards.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Architecture</h4>
+          <ul>
+            <li><a href="/api/health" target="_blank">Engine Health Check</a></li>
+            <li><a href="/docs" target="_blank">FastAPI OpenAPI Spec</a></li>
+            <li><a href="#howItWorks">Data Normalization Pipeline</a></li>
+            <li><a href="https://agent.tinyfish.ai" target="_blank" rel="noopener">TinyFish Web Platform</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Community & Quality</h4>
+          <ul>
+            <li><a href="javascript:void(0)" data-open-contribute>Submit Local Tip</a></li>
+            <li><a href="javascript:void(0)" onclick="openFeedbackModal()">Report Inaccurate Fact</a></li>
+            <li><a href="javascript:void(0)" onclick="openDiagnosticsModal()">System Diagnostics</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 KHOJ — Discover Places. Uncover Stories. All rights reserved.</div>
+        <div>AZINHACK '26 Project Submission</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODALS
+       ======================================================================== -->
+
+  <!-- 1. Place Detail Modal (Feature 4) -->
+  <div id="placeModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalPlaceTitle" class="modal-title">Place Details</h3>
+          <div id="modalPlaceDest" style="font-size: 13px; color: var(--color-charcoal-light); margin-top: 4px;"></div>
+        </div>
+        <button class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Claim Classification Notice -->
+        <div id="modalClaimNotice"></div>
+
+        <!-- Detailed Story & Historical Context -->
+        <div class="modal-section">
+          <h4>Narrative & Cultural Story</h4>
+          <p id="modalPlaceStory" style="white-space: pre-line;"></p>
+        </div>
+
+        <!-- Practical Tips -->
+        <div class="modal-section">
+          <h4>Actionable Traveller Tips</h4>
+          <ul id="modalTipsList" class="modal-tips-list"></ul>
+        </div>
+
+        <!-- Missing Details / Uncertainty Flag Notice -->
+        <div id="modalMissingBox" style="display: none;"></div>
+
+        <!-- Source Link & Freshness -->
+        <div id="modalSourceLink" style="padding: 12px; background: var(--color-ivory); border-radius: var(--radius-sm); font-size: 13px;"></div>
+
+        <!-- Action Row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--color-border); padding-top: 16px; margin-top: 8px;">
+          <button id="modalUpvoteBtn" class="btn btn-outline-forest">
+            ▲ Upvote
+          </button>
+          <button id="modalFeedbackTrigger" class="btn" style="color: #92400E; font-size: 13px; text-decoration: underline;">
+            🚩 Report Inaccurate or Outdated Info
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Transparent Scoring Breakdown Modal -->
+  <div id="scoreModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="scoreModalTitle" class="modal-title">Explainable Scoring Breakdown</h3>
+        <button class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body" id="scoreModalContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Community Contribution Modal (Feature 5) -->
+  <div id="contributeModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Share a Local Discovery</h3>
+          <p style="font-size: 13px; color: var(--color-charcoal-light);">Contribute an authentic spot, cultural story, or traveller tip</p>
+        </div>
+        <button class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="contributeForm" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="contribPlaceName">Place / Experience Name *</label>
+              <input type="text" id="contribPlaceName" class="form-input" placeholder="e.g. Hidden Chai Lookout" required minlength="2">
+            </div>
+            <div class="form-group">
+              <label for="contribDestination">City / Destination *</label>
+              <input type="text" id="contribDestination" class="form-input" placeholder="e.g. Dharamshala, HP" required minlength="2">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="contribCategory">Category</label>
+              <select id="contribCategory" class="form-select" required>
+                <option value="culture_history">Culture & History</option>
+                <option value="local_food">Local Food & Culinary</option>
+                <option value="markets_shopping">Markets & Crafts</option>
+                <option value="nature_scenic">Nature & Scenic</option>
+                <option value="local_experiences" selected>Living Heritage & Tips</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contribType">Contribution Type</label>
+              <select id="contribType" class="form-select" required>
+                <option value="new_place">New Lesser-Known Place</option>
+                <option value="local_tip">Practical Local Tip</option>
+                <option value="experience_story">Personal Travel Experience</option>
+                <option value="correction">Correction / Context</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contribDetails">Story, Cultural Context, or Experience (min 15 chars) *</label>
+            <textarea id="contribDetails" class="form-input" style="height: 100px; padding: 10px 14px; resize: vertical;" placeholder="Tell travellers what makes this place special, its background story, or unique cultural elements..." required minlength="15"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="contribTips">Practical Tips (Timing, Footwear, Fees, etc.)</label>
+            <input type="text" id="contribTips" class="form-input" placeholder="e.g. Arrive before 7 AM; steep steps; cash only">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="contribSource">Source Reference (Optional)</label>
+              <input type="text" id="contribSource" class="form-input" placeholder="e.g. Personal visit in Oct 2026 or link">
+            </div>
+            <div class="form-group">
+              <label for="contribName">Your Name / Handle</label>
+              <input type="text" id="contribName" class="form-input" placeholder="Anonymous Explorer">
+            </div>
+          </div>
+
+          <div style="margin-top: 10px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn btn-outline-forest" data-close-modal>Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Discovery</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Feedback & Correction Modal (Feature 6) -->
+  <div id="feedbackModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Flag / Suggest Correction</h3>
+          <p style="font-size: 13px; color: var(--color-charcoal-light);">Help keep KHOJ accurate and trustworthy</p>
+        </div>
+        <button class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="feedbackForm" style="display: flex; flex-direction: column; gap: 14px;">
+          <input type="hidden" id="feedbackPlaceId">
+
+          <div class="form-group">
+            <label for="feedbackPlaceName">Place Name *</label>
+            <input type="text" id="feedbackPlaceName" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="feedbackType">Issue Type *</label>
+            <select id="feedbackType" class="form-select" required>
+              <option value="outdated_info">Outdated Information (timings, prices, access)</option>
+              <option value="inaccurate_story">Inaccurate Historical / Cultural Claim</option>
+              <option value="place_closed">Place Closed or Inaccessible</option>
+              <option value="incorrect_location">Incorrect City or Destination Tag</option>
+              <option value="duplicate">Duplicate Entry</option>
+              <option value="other">Other Concern</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="feedbackNotes">Details / Correction Notes (min 5 chars) *</label>
+            <textarea id="feedbackNotes" class="form-input" style="height: 100px; padding: 10px 14px; resize: vertical;" placeholder="Please describe what is incorrect or what has changed, citing sources if available..." required minlength="5"></textarea>
+          </div>
+
+          <div style="margin-top: 10px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn btn-outline-forest" data-close-modal>Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. System Diagnostics Modal -->
+  <div id="diagnosticsModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Engine Diagnostics & Architecture</h3>
+        <button class="btn-close-modal" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body" id="diagnosticsContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Application Engine Script -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
