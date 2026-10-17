@@ -257,12 +257,6 @@ Or run directly with Uvicorn from the `backend/` directory:
 cd backend
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
-
-### 5. Access the Platform
-- **Interactive Web Client**: Open [http://127.0.0.1:8000](http://127.0.0.1:8000)
-- **FastAPI OpenAPI Documentation**: Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Health Diagnostic**: Open [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health)
-
 ---
 
 ## 9. Running Tests
